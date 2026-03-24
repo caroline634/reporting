@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporting MV Groupe – Kheops</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0f2f0;
+    font-family: 'DM Sans', sans-serif;
+    color: #1a1a1a;
+  }
+
+  .email-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+
+  /* HEADER */
+  .header {
+    background: #1a1a1a;
+    padding: 28px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #00E5A0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-icon svg { width: 18px; height: 18px; }
+  .logo-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+  }
+  .header-date {
+    font-size: 12px;
+    color: #888;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* HERO */
+  .hero {
+    background: #1a1a1a;
+    padding: 0 36px 36px;
+  }
+  .hero-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #00E5A0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: #888;
+  }
+
+  /* BODY */
+  .body {
+    padding: 32px 36px;
+  }
+
+  .intro {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 32px;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #00C48C;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8e8e8;
+  }
+
+  /* GMV STATS */
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    flex: 1;
+    background: #f7f7f7;
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 3px solid #00E5A0;
+  }
+  .stat-card.accent {
+    background: #1a1a1a;
+    border-left-color: #00E5A0;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #888;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+  .stat-card.accent .stat-label { color: #666; }
+  .stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .stat-card.accent .stat-value { color: #00E5A0; }
+  .stat-sub {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 4px;
+  }
+
+  /* GMV TREND CHART */
+  .chart-block {
+    background: #f7f7f7;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  .chart-sub {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 16px;
+  }
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 100px;
+  }
+  .bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .bar-pair {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    width: 100%;
+    justify-content: center;
+    flex: 1;
+    max-height: 90px;
+  }
+  .bar {
+    width: 10px;
+    border-radius: 3px 3px 0 0;
+    min-height: 2px;
+  }
+  .bar.eguilles { background: #00E5A0; }
+  .bar.saint-cannat { background: #1a1a1a; }
+  .bar-month {
+    font-size: 8px;
+    color: #bbb;
+    font-family: 'DM Mono', monospace;
+    text-align: center;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #666;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+  .legend-dot.eguilles { background: #00E5A0; }
+  .legend-dot.saint-cannat { background: #1a1a1a; }
+
+  /* MAGASINS */
+  .magasins-grid {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .magasin-card {
+    flex: 1;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .magasin-header {
+    padding: 14px 16px;
+    background: #f7f7f7;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .magasin-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
+  .magasin-gmv {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+  .magasin-gmv span {
+    font-size: 11px;
+    font-weight: 400;
+    color: #999;
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+  .magasin-body {
+    padding: 14px 16px;
+  }
+  .rayon-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+    color: #555;
+  }
+  .rayon-row:last-child { border-bottom: none; }
+  .rayon-badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+  .badge-active { background: #e6faf4; color: #00A874; }
+  .badge-progress { background: #fff8e6; color: #E6A817; }
+  .badge-soon { background: #f0f0f0; color: #888; }
+
+  /* MUTUALISATION */
+  .mutual-section {
+    margin-bottom: 32px;
+  }
+  .mutual-intro {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: #f7f9f7;
+    border-radius: 10px;
+    border-left: 3px solid #00E5A0;
+  }
+  .mutual-subsection {
+    margin-bottom: 16px;
+  }
+  .mutual-subtitle {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .supplier-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .supplier-row:last-child { border-bottom: none; }
+  .supplier-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .supplier-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 140px;
+    flex-shrink: 0;
+  }
+  .supplier-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .supplier-bar-label {
+    font-size: 9px;
+    color: #bbb;
+    width: 14px;
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
+  }
+  .supplier-bar-track {
+    flex: 1;
+    height: 7px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .supplier-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .fill-eguilles { background: #00E5A0; }
+  .fill-sc { background: #1a1a1a; }
+  .fill-zero { background: #f0f0f0; }
+  .supplier-volume {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-family: 'DM Mono', monospace;
+    width: 52px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .tag-opportunite {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 20px;
+    background: #fff3e0;
+    color: #E67E00;
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+  }
+
+  /* ODJ */
+  .odj-block {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 28px;
+  }
+  .odj-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .odj-date {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: #00E5A0;
+    background: rgba(0,229,160,0.1);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .odj-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .odj-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #ccc;
+    line-height: 1.4;
+  }
+  .odj-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #00E5A0;
+    background: rgba(0,229,160,0.12);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* CLOSING */
+  .closing {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .signature {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+  }
+  .sig-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .sig-role {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+  }
+  .sig-contact {
+    font-size: 12px;
+    color: #00C48C;
+    font-family: 'DM Mono', monospace;
+    margin-top: 4px;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: #f7f7f7;
+    padding: 16px 36px;
+    text-align: center;
+    border-top: 1px solid #eee;
+  }
+  .footer-link {
+    font-size: 12px;
+    color: #00C48C;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .footer-text {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 18 18" fill="none">
+          <path d="M3 9L9 3L15 9L9 15L3 9Z" fill="#1a1a1a"/>
+        </svg>
+      </div>
+      <span class="logo-text">kheops</span>
+    </div>
+    <span class="header-date">Mars 2026</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Reporting MV Groupe</div>
+    <div class="hero-title">Bilan & perspectives<br>avant le 7 avril</div>
+    <div class="hero-sub">U Express Éguilles &amp; U Express Saint-Cannat</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <p class="intro">Bonjour Vincent,<br><br>En amont de notre échange du 7 avril, voici un point consolidé sur l'avancée de notre collaboration à travers vos deux magasins.</p>
+
+    <!-- STATS GMV -->
+    <div class="section-title">Bilan global</div>
+    <div class="stats-row">
+      <div class="stat-card accent">
+        <div class="stat-label">GMV totale</div>
+        <div class="stat-value">121 k€</div>
+        <div class="stat-sub">depuis le démarrage</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Éguilles</div>
+        <div class="stat-value">57 k€</div>
+        <div class="stat-sub">57 418 €</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Saint-Cannat</div>
+        <div class="stat-value">63 k€</div>
+        <div class="stat-sub">63 670 €</div>
+      </div>
+    </div>
+
+    <!-- TREND CHART -->
+    <div class="chart-block">
+      <div class="chart-title">Volume d'achats mensuel (€)</div>
+      <div class="chart-sub">Juin 2025 – Mars 2026</div>
+      <div class="bar-chart" id="barChart"></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot eguilles"></div>Éguilles</div>
+        <div class="legend-item"><div class="legend-dot saint-cannat"></div>Saint-Cannat</div>
+      </div>
+    </div>
+
+    <!-- MAGASINS -->
+    <div class="section-title">État des magasins</div>
+    <div class="magasins-grid">
+      <div class="magasin-card">
+        <div class="magasin-header">
+          <div class="magasin-name">U Express Éguilles</div>
+          <div class="magasin-gmv">57 418 €<span>GMV totale</span></div>
+        </div>
+        <div class="magasin-body">
+          <div class="rayon-row"><span>Épicerie / Liquide</span><span class="rayon-badge badge-active">Actif</span></div>
+          <div class="rayon-row"><span>Frais</span><span class="rayon-badge badge-active">Actif</span></div>
+          <div class="rayon-row"><span>Fruits &amp; Légumes</span><span class="rayon-badge badge-progress">En cours</span></div>
+          <div class="rayon-row"><span>Factures fournisseurs</span><span class="rayon-badge badge-active">✓ Déposées</span></div>
+          <div class="rayon-row"><span>Publication Drive</span><span class="rayon-badge badge-active">24 mars ✓</span></div>
+        </div>
+      </div>
+      <div class="magasin-card">
+        <div class="magasin-header">
+          <div class="magasin-name">U Express Saint-Cannat</div>
+          <div class="magasin-gmv">63 670 €<span>GMV totale</span></div>
+        </div>
+        <div class="magasin-body">
+          <div class="rayon-row"><span>Épicerie / Liquide</span><span class="rayon-badge badge-active">Actif</span></div>
+          <div class="rayon-row"><span>Frais</span><span class="rayon-badge badge-active">Actif</span></div>
+          <div class="rayon-row"><span>Fruits &amp; Légumes</span><span class="rayon-badge badge-progress">En cours</span></div>
+          <div class="rayon-row"><span>Factures fournisseurs</span><span class="rayon-badge badge-active">✓ Déposées</span></div>
+          <div class="rayon-row"><span>Publication Drive</span><span class="rayon-badge badge-soon">1er avril</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MUTUALISATION -->
+    <div class="section-title">Opportunités de mutualisation</div>
+    <div class="mutual-section">
+      <div class="mutual-intro">
+        En croisant les données de vos deux magasins, plusieurs fournisseurs performants sur l'un sont absents de l'autre — autant de leviers de croissance immédiats, sans redémarrage à froid.
+      </div>
+
+      <div class="mutual-subsection">
+        <div class="mutual-subtitle">Actifs à Saint-Cannat → à déployer sur Éguilles</div>
+
+        <!-- Le Bio de Manon -->
+        <div class="supplier-row">
+          <div class="supplier-name">Le Bio de Manon</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-sc" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-zero" style="width:2%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">27 397€</div>
+          <div class="tag-opportunite">Priorité !</div>
+        </div>
+
+        <!-- Akiris -->
+        <div class="supplier-row">
+          <div class="supplier-name">Akiris Distribution</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-sc" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-zero" style="width:2%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">4 430€</div>
+          <div class="tag-opportunite">Absent</div>
+        </div>
+
+        <!-- AlterFood -->
+        <div class="supplier-row">
+          <div class="supplier-name">AlterFood</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-sc" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-zero" style="width:2%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">2 482€</div>
+          <div class="tag-opportunite">Absent</div>
+        </div>
+      </div>
+
+      <div class="mutual-subsection">
+        <div class="mutual-subtitle">Actifs à Éguilles → à déployer sur Saint-Cannat</div>
+
+        <!-- Debroas -->
+        <div class="supplier-row">
+          <div class="supplier-name">Debroas</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-eguilles" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-zero" style="width:2%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">6 805€</div>
+          <div class="tag-opportunite">Absent</div>
+        </div>
+
+        <!-- Château Virant -->
+        <div class="supplier-row">
+          <div class="supplier-name">Château Virant</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-eguilles" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-zero" style="width:2%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">6 497€</div>
+          <div class="tag-opportunite">Absent</div>
+        </div>
+
+        <!-- Amphorea -->
+        <div class="supplier-row">
+          <div class="supplier-name">Amphorea</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-eguilles" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-zero" style="width:2%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">6 246€</div>
+          <div class="tag-opportunite">Absent</div>
+        </div>
+      </div>
+
+      <div class="mutual-subsection">
+        <div class="mutual-subtitle">Présents sur les deux — volume à équilibrer</div>
+
+        <!-- Le Palais des Mets -->
+        <div class="supplier-row">
+          <div class="supplier-name">Le Palais des Mets</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-sc" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-eguilles" style="width:74%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">19 488€</div>
+          <div class="tag-opportunite">+35%</div>
+        </div>
+
+        <!-- La Compagnie Bio -->
+        <div class="supplier-row">
+          <div class="supplier-name">Compagnie Bio Provence</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-sc" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-eguilles" style="width:78%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">7 741€</div>
+          <div class="tag-opportunite">+28%</div>
+        </div>
+
+        <!-- Cafés Bibal -->
+        <div class="supplier-row">
+          <div class="supplier-name">Cafés Bibal</div>
+          <div class="supplier-bars">
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">SC</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-sc" style="width:100%"></div></div>
+            </div>
+            <div class="supplier-bar-row">
+              <div class="supplier-bar-label">ÉG</div>
+              <div class="supplier-bar-track"><div class="supplier-bar-fill fill-eguilles" style="width:78%"></div></div>
+            </div>
+          </div>
+          <div class="supplier-volume">6 160€</div>
+          <div class="tag-opportunite">+28%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDRE DU JOUR -->
+    <div class="section-title">Ordre du jour – 7 avril</div>
+    <div class="odj-block">
+      <div class="odj-title">
+        Proposition d'ordre du jour
+        <span class="odj-date">07.04.2026</span>
+      </div>
+      <ol class="odj-list">
+        <li class="odj-item"><span class="odj-num">1</span>Bilan chiffré de la collaboration (GMV, commandes, fournisseurs actifs)</li>
+        <li class="odj-item"><span class="odj-num">2</span>Activation des rayons Fruits &amp; Légumes sur les deux magasins</li>
+        <li class="odj-item"><span class="odj-num">3</span>Plan de mutualisation des fournisseurs à fort potentiel</li>
+        <li class="odj-item"><span class="odj-num">4</span>Accélération de la prise en main à Saint-Cannat</li>
+        <li class="odj-item"><span class="odj-num">5</span>Questions ouvertes &amp; perspectives</li>
+      </ol>
+    </div>
+
+    <!-- CLOSING -->
+    <p class="closing">N'hésitez pas à me faire part de vos priorités si vous souhaitez ajuster cet ordre du jour. Je reste disponible d'ici le 7 avril pour toute question.</p>
+    <p class="closing">Bien cordialement,</p>
+
+    <div class="signature">
+      <div class="sig-name">Eliot Moni</div>
+      <div class="sig-role">Chef de Secteur – PACA</div>
+      <div class="sig-contact">06 74 28 13 53 · app.kheops.io</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <a href="https://app.kheops.io" class="footer-link">app.kheops.io</a>
+    <div class="footer-text">Cet email vous est envoyé par Kheops dans le cadre de votre collaboration.</div>
+  </div>
+</div>
+
+<script>
+// BAR CHART DATA
+const data = [
+  { month: 'Jun', eg: 0, sc: 3175 },
+  { month: 'Jul', eg: 1623, sc: 5477 },
+  { month: 'Aoû', eg: 7389, sc: 6212 },
+  { month: 'Sep', eg: 5340, sc: 7607 },
+  { month: 'Oct', eg: 4226, sc: 8772 },
+  { month: 'Nov', eg: 7715, sc: 9878 },
+  { month: 'Déc', eg: 8656, sc: 5090 },
+  { month: 'Jan', eg: 10129, sc: 5096 },
+  { month: 'Fév', eg: 8841, sc: 8764 },
+  { month: 'Mar', eg: 3498, sc: 3600 },
+];
+
+const maxVal = Math.max(...data.flatMap(d => [d.eg, d.sc]));
+const chartEl = document.getElementById('barChart');
+const MAX_H = 85;
+
+data.forEach(d => {
+  const group = document.createElement('div');
+  group.className = 'bar-group';
+
+  const pair = document.createElement('div');
+  pair.className = 'bar-pair';
+
+  if (d.eg > 0) {
+    const b = document.createElement('div');
+    b.className = 'bar eguilles';
+    b.style.height = Math.max(2, (d.eg / maxVal) * MAX_H) + 'px';
+    pair.appendChild(b);
+  } else {
+    const spacer = document.createElement('div');
+    spacer.style.width = '10px';
+    pair.appendChild(spacer);
+  }
+
+  const b2 = document.createElement('div');
+  b2.className = 'bar saint-cannat';
+  b2.style.height = Math.max(2, (d.sc / maxVal) * MAX_H) + 'px';
+  pair.appendChild(b2);
+
+  const label = document.createElement('div');
+  label.className = 'bar-month';
+  label.textContent = d.month;
+
+  group.appendChild(pair);
+  group.appendChild(label);
+  chartEl.appendChild(group);
+});
+</script>
+</body>
+</html>
